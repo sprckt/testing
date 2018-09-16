@@ -4,7 +4,9 @@ import datetime
 import sourcey
 from unittest import mock
 
+
 def add_time_to_simples():
+    sourcey.divider("Mock with Functions")
     sourcey_result = sourcey.simples()
     dt = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     return f"{dt} >>\t{sourcey_result}"
@@ -46,5 +48,44 @@ def mock_with_side_effect(mock_replace_simples):
     dt = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     print(f"{dt} >>\t{sourcey_result}")
 
-mock_with_side_effect() 
+mock_with_side_effect()
 
+
+####################################################
+"""
+Using Mocks with Classes now
+"""
+
+def use_class():
+    inst = sourcey.SourceClass()
+    sourcey.divider('Mock with classes')
+    print(inst.explode())
+
+use_class()
+
+
+@mock.patch("sourcey.SourceClass")
+def mock_use_class(mock_source_class):
+    """
+    Mock the entire class imported from Sourcey
+    :return:
+    """
+    print(mock_source_class)
+    print(sourcey.SourceClass)
+    inst = sourcey.SourceClass()
+    print('This creates an instance of the mock - so a new mock (and hence a new id')
+    print(inst)
+    print(mock_source_class.return_value)
+
+mock_use_class()
+
+
+@mock.patch("sourcey.SourceClass")
+def mock_methods(mock_source_class):
+    mock_source_class.return_value.explode.return_value = 'small boom'
+    inst = sourcey.SourceClass()
+    result = inst.explode()
+    print('\nMocking what we get back from methods')
+    print('mock_methods(): ' + result)
+
+mock_methods()
